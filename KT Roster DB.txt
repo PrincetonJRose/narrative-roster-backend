@@ -1,0 +1,224 @@
+// Use DBML to define your database structure
+// Docs: https://dbml.dbdiagram.io/docs
+
+Table roster {
+  id integer [primary key]
+  name text
+  faction_id integer
+  base_of_operations text
+  history text
+  squad_quirk text
+  requisition_points integer
+  strategic_asset_capacity integer
+  user_id integer
+  created_at timestamp
+  updated_at timestamp 
+}
+
+Table roster_spec_ops {
+  id integer [primary key]
+  roster_id integer
+  spec_ops_id integer
+  active boolean
+  op1_progress integer
+  op1_completion boolean
+  op2_completion boolean
+  completed boolean
+  created_at timestamp
+  updated_at timestamp 
+}
+
+Table spec_ops {
+  id integer [primary key]
+  name text
+  description text
+  operation_1 text
+  operation_2 text
+  commendation text
+  faction_id integer
+  created_at timestamp
+  updated_at timestamp 
+}
+
+Table requisitions {
+  id integer [primary key]
+  name text
+  description text
+  cost integer
+  faction_id integer
+  created_at timestamp
+  updated_at timestamp 
+}
+
+Table roster_requisitions {
+  id integer [primary key]
+  roster_id integer
+  requisitions_id integer
+  created_at timestamp
+  updated_at timestamp 
+}
+
+Table team_strategic_assets {
+  id integer [primary key]
+  roster_id integer
+  strategic_asset_id integer
+  created_at timestamp
+  updated_at timestamp 
+}
+
+Table strategic_assets {
+  id integer [primary key]
+  name text
+  description text
+  faction_id integer
+  created_at timestamp
+  updated_at timestamp 
+}
+
+Table faction {
+  id integer [primary key]
+  name text
+  description text
+  created_at timestamp
+  updated_at timestamp 
+}
+
+table faction_equipment {
+  id integer [primary key]
+  faction_id integer
+  equipment_id integer
+  created_at timestamp
+  updated_at timestamp 
+}
+
+Table stash {
+  id integer [primary key]
+  roster_id integer
+  equipment_id integer
+  quantity integer
+  created_at timestamp
+  updated_at timestamp 
+}
+
+Table equipment {
+  id integer [primary key]
+  name text
+  description text
+  cost integer
+  created_at timestamp
+  updated_at timestamp 
+}
+
+Table users {
+  id integer [primary key]
+  email varchar
+  password varchar
+  created_at timestamp
+  updated_at timestamp 
+}
+
+Table operatives {
+  id integer [primary key]
+  name text
+  faction_unit text
+  roster_id integer
+  status varchar
+  experience_points integer
+  rested_tally integer
+  notes text
+  ranks_id integer
+  created_at timestamp
+  updated_at timestamp 
+}
+
+Table battle_scars {
+  id integer [primary key]
+  name text
+  description text
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table battle_honours {
+  id integer [primary key]
+  name text
+  description text
+  number integer
+  battle_honour_types_id integer
+  faction_id integer
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table battle_honour_types {
+  id integer [primary key]
+  name text
+  description text
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table operative_battle_scars {
+  id integer [primary key]
+  operative_id integer
+  battle_scar_id integer
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table operative_battle_honours {
+  id integer [primary key]
+  operative_id integer
+  battle_honour_id integer
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table ranks {
+  id integer [primary key]
+  name text
+  exp_required_lower integer
+  exp_required_upper integer
+  created_at timestamp
+  updated_at timestamp
+}
+
+
+
+Ref: "operatives"."id" < "operative_battle_scars"."operative_id"
+
+Ref: "battle_scars"."id" < "operative_battle_scars"."battle_scar_id"
+
+Ref: "operatives"."id" < "operative_battle_honours"."operative_id"
+
+Ref: "battle_honours"."id" < "operative_battle_honours"."battle_honour_id"
+
+Ref: "faction"."id" < "roster"."faction_id"
+
+Ref: "faction"."id" < "faction_equipment"."faction_id"
+
+Ref: "equipment"."id" < "faction_equipment"."equipment_id"
+
+Ref: "roster"."id" < "stash"."roster_id"
+
+Ref: "equipment"."id" < "stash"."equipment_id"
+
+Ref: "roster"."id" < "team_strategic_assets"."roster_id"
+
+Ref: "strategic_assets"."id" < "team_strategic_assets"."strategic_asset_id"
+
+Ref: "users"."id" < "roster"."user_id"
+
+Ref: "roster"."id" < "operatives"."roster_id"
+
+Ref: "battle_honour_types"."id" < "battle_honours"."battle_honour_types_id"
+
+Ref: "ranks"."id" < "operatives"."ranks_id"
+
+Ref: "roster"."id" < "roster_spec_ops"."roster_id"
+
+Ref: "spec_ops"."id" < "roster_spec_ops"."spec_ops_id"
+
+Ref: "roster"."id" < "roster_requisitions"."roster_id"
+
+Ref: "requisitions"."id" < "roster_requisitions"."requisitions_id"
